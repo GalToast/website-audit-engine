@@ -1,0 +1,111 @@
+name: Audit Lead
+run-name: Audit Lead #${{ inputs.lead_id }} - ${{ inputs.domain }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      lead_id:
+        description: 'Lead ID (e.g., 3648)'
+        required: true
+      domain:
+        description: 'Domain to audit (e.g., example.com)'
+        required: true
+      profile_range:
+        description: 'Profile range (e.g., 3600-3699)'
+        required: false
+        default: ''
+      batch_token:
+        description: 'Optional batch token for correlating parallel runs'
+        required: false
+        default: ''
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --include=dev 2>/dev/null || npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+      
+      - name: Run audit
+        env:
+          LEAD_ID: ${{ inputs.lead_id }}
+          PROFILE_RANGE: ${{ inputs.profile_range }}
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          mkdir -p "ops/screenshots"
+          ARGS="$LEAD_ID $DOMAIN"
+          if [ -n "$PROFILE_RANGE" ]; then
+            ARGS="$ARGS $PROFILE_RANGE"
+          fi
+          node audit-lead.js $ARGS > "audit-$LEAD_ID.json"
+      
+      - name: Prepare results for encryption
+        if: always()
+        env:
+          LEAD_ID: ${{ inputs.lead_id }}
+          PROFILE_RANGE: ${{ inputs.profile_range }}
+        run: |
+          mkdir -p results
+          if [ -n "$PROFILE_RANGE" ] && [ -d "leads/profiles/$PROFILE_RANGE" ]; then
+            TARGET_DIR="$(find "leads/profiles/$PROFILE_RANGE" -maxdepth 1 -mindepth 1 -type d -name "${LEAD_ID}-*" | head -n 1)"
+            if [ -n "$TARGET_DIR" ]; then
+              mkdir -p "results/leads/profiles/$PROFILE_RANGE"
+              cp -r "$TARGET_DIR" "results/leads/profiles/$PROFILE_RANGE/" 2>/dev/null || true
+            fi
+          fi
+          if [ -d "ops/screenshots" ]; then
+            if ls "ops/screenshots/${LEAD_ID}-"* >/dev/null 2>&1; then
+              mkdir -p "results/ops/screenshots"
+              cp ops/screenshots/"${LEAD_ID}-"* "results/ops/screenshots/" 2>/dev/null || true
+            fi
+          fi
+          if [ -f "audit-$LEAD_ID.json" ]; then
+            cp "audit-$LEAD_ID.json" "results/" 2>/dev/null || true
+          fi
+          cd results
+          tar -czf ../audit-results.tar.gz .
+          cd ..
+      
+      - name: Encrypt results
+        if: always()
+        env:
+          ENC_KEY: ${{ secrets.AUDIT_ENCRYPTION_KEY }}
+        run: |
+          echo "$ENC_KEY" > /tmp/key.txt
+          openssl enc -aes-256-cbc -salt -pbkdf2 \
+            -in audit-results.tar.gz \
+            -out audit-results.tar.gz.enc \
+            -pass file:/tmp/key.txt
+          rm -f /tmp/key.txt audit-results.tar.gz
+      
+      - name: Upload encrypted artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-${{ inputs.lead_id }}-${{ inputs.batch_token }}-encrypted
+          path: audit-results.tar.gz.enc
+          retention-days: 1
+
+      - name: Cleanup on failure
+        if: failure()
+        env:
+          DOMAIN: ${{ inputs.domain }}
+        run: |
+          echo "::warning::Audit failed for $DOMAIN"
