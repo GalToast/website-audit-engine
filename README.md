@@ -1,6 +1,15 @@
 # Website Audit Engine
 
-Automated security and performance auditor for website assessment at scale. Built with Playwright.
+Evidence-tiered website security and performance auditor built with Playwright.
+
+This repo demonstrates practical automation around messy public websites: browser-driven checks, security-header review, payment surface detection, confidence-ranked findings, SQLite persistence, and GitHub Actions batch runs. The goal is not to produce noisy scanner output; it is to separate verified, user-facing issues from weaker review signals.
+
+## Why It Matters
+
+- Runs repeatable audits across many domains without losing per-site evidence.
+- Keeps security, performance, accessibility, and runtime errors in one review path.
+- Uses confidence tiers so an operator can tell the difference between "verified issue" and "needs human review."
+- Supports both local investigation and GitHub Actions batch execution.
 
 ## What It Checks
 
@@ -52,3 +61,7 @@ GitHub Actions secrets required:
 - `batch-audit-gh.ps1` — batch orchestrator
 - `run-audit-gh.ps1` — single-run GitHub Actions trigger
 - `.github/workflows/audit-lead.yml` — CI/CD workflow
+
+## Recruiter Reading Guide
+
+Start with `audit-lead.security.test.js` for the security boundary design, then read `audit-lead.js` for the browser automation and evidence model. The interesting engineering is the confidence discipline: findings are useful because they are tiered, not because every heuristic is treated as truth.
