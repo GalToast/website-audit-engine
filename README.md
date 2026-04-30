@@ -11,6 +11,15 @@ This repo demonstrates practical automation around messy public websites: browse
 - Uses confidence tiers so an operator can tell the difference between "verified issue" and "needs human review."
 - Supports both local investigation and GitHub Actions batch execution.
 
+## Proof Artifacts
+
+| Artifact | What it shows |
+| --- | --- |
+| `audit-lead.security.test.js` | Security boundary tests and confidence-tier behavior |
+| `audit-lead.js` | Browser automation, evidence capture, and audit orchestration |
+| `.github/workflows/audit-lead.yml` | Batchable GitHub Actions audit workflow |
+| `batch-audit-gh.ps1` | Multi-domain orchestration path |
+
 ## What It Checks
 
 **Security** (80+ checks)
