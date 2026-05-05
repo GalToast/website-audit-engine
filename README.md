@@ -17,6 +17,7 @@ This repo demonstrates practical automation around messy public websites: browse
 | --- | --- |
 | `audit-lead.security.test.js` | Security boundary tests and confidence-tier behavior |
 | `audit-lead.js` | Browser automation, evidence capture, and audit orchestration |
+| `docs/authorization-model.md` | Authorization, target, and dual-use safety boundary for audit runs |
 | `docs/architecture-map.md` | Reviewer map for the large operational auditor file |
 | `.github/workflows/audit-lead.yml` | Batchable GitHub Actions audit workflow |
 | `batch-audit-gh.ps1` | Multi-domain orchestration path |
@@ -64,10 +65,15 @@ pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
 
 `npm test` is the fastest first click: it runs the confidence-tier and security-boundary tests without launching a browser. Local single-domain audits do not require API keys, but full profile output assumes a lead/profile workspace such as `leads/profiles/<range>/<lead>/profile.md`. GitHub Actions artifact encryption uses the `AUDIT_ENCRYPTION_KEY` repository secret.
 
+## Authorization Boundary
+
+This is an authorized-audit tool, not an open-ended reconnaissance system. It is intended for owned sites, client-authorized sites, and explicitly approved review queues. Batch runs should use target lists with prior authorization, and public outputs should avoid publishing private target lists, credentials, raw logs, or exploit instructions. See `docs/authorization-model.md`.
+
 ## Architecture
 
 - `audit-lead.js` — main auditor
 - `audit-lead.security.test.js` — security test suite
+- `docs/authorization-model.md` — authorized-use and target-boundary model
 - `docs/architecture-map.md` — map of the main auditor's regions and review path
 - `batch-audit-gh.ps1` — batch orchestrator
 - `run-audit-gh.ps1` — single-run GitHub Actions trigger
