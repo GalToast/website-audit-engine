@@ -28,6 +28,7 @@ This repo demonstrates practical automation around messy public websites: browse
 - SSL/TLS configuration and certificate validity
 - Security headers (CSP, HSTS, X-Frame-Options, etc.)
 - Cookie hygiene and session token handling
+- Page-source secret pattern scanning, including exposed MongoDB connection-string-shaped URIs
 - Payment surface classification (Stripe, PayPal, Square, Braintree)
 - CSRF truthfulness verification
 - Environment file (.env) exposure
@@ -85,4 +86,4 @@ The main auditor is currently a large operational integration file. That is a co
 
 ## Recruiter Reading Guide
 
-Start with `audit-lead.security.test.js` for the security boundary design, then read `docs/architecture-map.md` before opening `audit-lead.js`. The interesting engineering is the confidence discipline: findings are useful because they are tiered, not because every heuristic is treated as truth.
+Start with `audit-lead.security.test.js` for the security boundary design, then read `docs/architecture-map.md` before opening `audit-lead.js`. The interesting engineering is the confidence discipline: findings are useful because they are tiered, not because every heuristic is treated as truth. MongoDB appears here as a secrets-scanning detector for exposed connection-string patterns in delivered page source, not as a claim that this project uses MongoDB as its backend.

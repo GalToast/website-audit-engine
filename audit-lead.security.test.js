@@ -106,6 +106,53 @@ test("public identifiers stay informational and generic public-token contexts ar
   assert.equal(findings.some((entry) => entry.type === "Access Token"), false);
 });
 
+test("database connection string scanning flags MongoDB URIs without exposing fixture passwords", () => {
+  const findings = extractApiKeysFromPageContent(`
+    window.__config = {
+      primary: "mongodb://demoUser:demoPassword@db.example.test:27017/app",
+      replica: "mongodb+srv://atlasUser:atlasPassword@cluster0.example.test/app"
+    };
+  `);
+
+  const mongoFinding = findings.find((entry) => entry.type === "MongoDB Connection String");
+
+  assert.ok(mongoFinding);
+  assert.equal(mongoFinding.count, 2);
+  assert.equal(mongoFinding.severity, "critical");
+  assert.equal(mongoFinding.confidence, "verified");
+  assert.equal(mongoFinding.samples.some((sample) => /demoPassword|atlasPassword/.test(sample)), false);
+});
+
+test("MongoDB connection string findings remain page-source evidence, not backend proof", () => {
+  const result = createBaseResult({
+    sensitiveExposures: {
+      sensitiveFiles: [],
+      exposedGit: false,
+      exposedEnv: false,
+      exposedConfig: false,
+      apiKeys: [
+        {
+          type: "MongoDB Connection String",
+          count: 1,
+          severity: "critical",
+          confidence: "verified",
+          samples: ["mongodb+srv://..."],
+        },
+      ],
+      riskyEndpoints: [],
+    },
+  });
+
+  buildConfidenceFindings(result);
+
+  assert.ok(result.findingConfidence.verified.some((entry) =>
+    entry.message === "Exposed key in page source: MongoDB Connection String" &&
+    entry.evidence.source === "page-source-scan"
+  ));
+  assert.equal(calculateAuditScore(result), 80);
+  assert.ok(result.criticalIssues.some((issue) => /MongoDB Connection String/.test(issue)));
+});
+
 test("confidence findings keep runtime noise and non-security gaps out of verified security claims", () => {
   const result = createBaseResult({
     brokenImages: ["https://example.com/broken.png"],

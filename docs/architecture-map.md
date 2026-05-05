@@ -25,6 +25,8 @@ For a fast technical review:
 3. Skim the page analysis probes for browser automation breadth.
 4. Use this file only after the README and tests; the auditor is an operational integration script, not a small library API.
 
+The database-URI rules in the API-key pattern dictionary are page-source exposure checks. For example, the MongoDB rule flags delivered `mongodb://` or `mongodb+srv://` strings with embedded credentials as a critical secret-looking artifact; it does not imply this repository runs a MongoDB backend.
+
 ## Why Not Split Yet?
 
 The next maintainability step is to extract these regions into modules, but the current public version favors traceability of the working audit path over a large refactor. The test suite protects the most sensitive boundary behavior while that extraction remains future work.
