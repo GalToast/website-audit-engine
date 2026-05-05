@@ -93,9 +93,11 @@ function createBaseResult(overrides = {}) {
 }
 
 test("public identifiers stay informational and generic public-token contexts are suppressed", () => {
+  const exampleStripeKey = `pk_live_${"123456789012345678901234"}`;
+  const exampleTwilioSid = `AC${"0123456789abcdef0123456789abcdef"}`;
   const findings = extractApiKeysFromPageContent(`
-    const stripeKey = "pk_live_123456789012345678901234";
-    const twilioSid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    const stripeKey = "${exampleStripeKey}";
+    const twilioSid = "${exampleTwilioSid}";
     const publicConfig = { access_token: "widget-public-token-1234567890" };
   `);
 

@@ -29,7 +29,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Config
-$Repo = "GalToast/temp-while-comp-at-shop"
+$Repo = "GalToast/website-audit-engine"
 $OpenSSLPath = "C:\Program Files\Git\usr\bin\openssl.exe"
 $KeyFile = "$env:USERPROFILE\.audit-encryption-key"
 $ReviewBase = "ops\audit-review"

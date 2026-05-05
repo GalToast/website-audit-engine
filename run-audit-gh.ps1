@@ -66,7 +66,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Config
-$Repo = "GalToast/temp-while-comp-at-shop"
+$Repo = "GalToast/website-audit-engine"
 $Workflow = "audit-lead.yml"
 $KeyFile = "$env:USERPROFILE\.audit-encryption-key"
 $OpenSSL = "C:\Program Files\Git\usr\bin\openssl.exe"

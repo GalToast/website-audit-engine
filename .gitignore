@@ -1,0 +1,6 @@
+node_modules/
+.env
+.env.*
+audit-*.json
+audit-review-*/
+ops/screenshots/

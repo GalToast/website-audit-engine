@@ -45,23 +45,23 @@ This repo demonstrates practical automation around messy public websites: browse
 ## Usage
 
 ```bash
+# Install dependencies
+npm install
+npx playwright install chromium
+
 # Single domain audit
-node audit-lead.js --domain example.com
+node audit-lead.js 1234 example.com
 
 # Run all tests (including security)
-node audit-lead.security.test.js
+npm test
 
 # Trigger GitHub Actions batch
-pwsh run-audit-gh.ps1 -Repo "owner/repo" -Domain "example.com"
+pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
 ```
 
 ## Configuration
 
-Copy `.env.example` to `.env` and set your API keys:
-- `AUDIT_ENCRYPTION_KEY` — for GitHub Actions secrets
-
-GitHub Actions secrets required:
-- `AUDIT_ENCRYPTION_KEY`
+Local single-domain audits do not require API keys. GitHub Actions artifact encryption uses the `AUDIT_ENCRYPTION_KEY` repository secret.
 
 ## Architecture
 

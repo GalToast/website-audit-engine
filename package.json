@@ -1,0 +1,22 @@
+{
+  "name": "website-audit-engine",
+  "version": "1.0.0",
+  "description": "Evidence-tiered website security and performance auditor built with Playwright.",
+  "main": "audit-lead.js",
+  "scripts": {
+    "audit": "node audit-lead.js",
+    "test": "node audit-lead.security.test.js"
+  },
+  "keywords": [
+    "playwright",
+    "security-audit",
+    "performance",
+    "automation",
+    "website-audit"
+  ],
+  "author": "McCullough Digital",
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}
