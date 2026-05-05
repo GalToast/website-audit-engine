@@ -69,6 +69,8 @@ pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
 
 This is an authorized-audit tool, not an open-ended reconnaissance system. It is intended for owned sites, client-authorized sites, and explicitly approved review queues. Batch runs should use target lists with prior authorization, and public outputs should avoid publishing private target lists, credentials, raw logs, or exploit instructions. See `docs/authorization-model.md`.
 
+Example outputs and public proof artifacts in this repo are intended to come from owned domains, client-authorized targets, synthetic fixtures, or public demo targets. Private target lists and raw client run logs are intentionally excluded.
+
 ## Architecture
 
 - `audit-lead.js` — main auditor
