@@ -56,17 +56,18 @@ param(
     
     [switch]$KeepEncrypted = $false,
     
-    [bool]$SelfDelete = $true,
+    [bool]$SelfDelete = $false,
     
     [switch]$ReviewOnly = $false,
     
-    [switch]$ApplyChanges = $false
+    [switch]$ApplyChanges = $false,
+
+    [string]$Repo = "GalToast/website-audit-engine"
 )
 
 $ErrorActionPreference = "Stop"
 
 # Config
-$Repo = "GalToast/website-audit-engine"
 $Workflow = "audit-lead.yml"
 $KeyFile = "$env:USERPROFILE\.audit-encryption-key"
 $OpenSSL = "C:\Program Files\Git\usr\bin\openssl.exe"

@@ -14,8 +14,16 @@
     "automation",
     "website-audit"
   ],
-  "author": "McCullough Digital",
+  "author": "Fred McCullough",
   "license": "MIT",
+  "files": [
+    "audit-lead.js",
+    "audit-lead.security.test.js",
+    "batch-audit-gh.ps1",
+    "run-audit-gh.ps1",
+    "README.md",
+    "LICENSE"
+  ],
   "devDependencies": {
     "playwright": "^1.56.0"
   }

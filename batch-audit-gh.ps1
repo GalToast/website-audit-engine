@@ -23,13 +23,13 @@ Show what would be run without triggering workflows
 param(
     [int]$Count = 50,
     [string]$StartRange,
-    [switch]$DryRun
+    [switch]$DryRun,
+    [string]$Repo = "GalToast/website-audit-engine"
 )
 
 $ErrorActionPreference = "Stop"
 
 # Config
-$Repo = "GalToast/website-audit-engine"
 $OpenSSLPath = "C:\Program Files\Git\usr\bin\openssl.exe"
 $KeyFile = "$env:USERPROFILE\.audit-encryption-key"
 $ReviewBase = "ops\audit-review"

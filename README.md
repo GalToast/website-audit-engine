@@ -22,7 +22,7 @@ This repo demonstrates practical automation around messy public websites: browse
 
 ## What It Checks
 
-**Security** (80+ checks)
+**Security**
 - SSL/TLS configuration and certificate validity
 - Security headers (CSP, HSTS, X-Frame-Options, etc.)
 - Cookie hygiene and session token handling
@@ -36,7 +36,7 @@ This repo demonstrates practical automation around messy public websites: browse
 - Lighthouse accessibility scoring
 
 **Automation**
-- Dual-mode browser automation (light and heavy evasion)
+- Browser automation with a light default mode and heavier compatibility handling for sites that block ordinary inspection
 - Concurrent domain scanning with runtime error recovery
 - Confidence-tiered results (Diamond / Gold / Standard)
 - Batch GitHub Actions workflow for large-scale audits
@@ -49,11 +49,11 @@ This repo demonstrates practical automation around messy public websites: browse
 npm install
 npx playwright install chromium
 
+# Self-contained verification
+npm test
+
 # Single domain audit
 node audit-lead.js 1234 example.com
-
-# Run all tests (including security)
-npm test
 
 # Trigger GitHub Actions batch
 pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
@@ -61,7 +61,7 @@ pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
 
 ## Configuration
 
-Local single-domain audits do not require API keys. GitHub Actions artifact encryption uses the `AUDIT_ENCRYPTION_KEY` repository secret.
+`npm test` is the fastest first click: it runs the confidence-tier and security-boundary tests without launching a browser. Local single-domain audits do not require API keys, but full profile output assumes a lead/profile workspace such as `leads/profiles/<range>/<lead>/profile.md`. GitHub Actions artifact encryption uses the `AUDIT_ENCRYPTION_KEY` repository secret.
 
 ## Architecture
 
