@@ -17,6 +17,7 @@ This repo demonstrates practical automation around messy public websites: browse
 | --- | --- |
 | `audit-lead.security.test.js` | Security boundary tests and confidence-tier behavior |
 | `audit-lead.js` | Browser automation, evidence capture, and audit orchestration |
+| `docs/architecture-map.md` | Reviewer map for the large operational auditor file |
 | `.github/workflows/audit-lead.yml` | Batchable GitHub Actions audit workflow |
 | `batch-audit-gh.ps1` | Multi-domain orchestration path |
 
@@ -67,10 +68,13 @@ pwsh ./run-audit-gh.ps1 -LeadId "1234" -Domain "example.com"
 
 - `audit-lead.js` — main auditor
 - `audit-lead.security.test.js` — security test suite
+- `docs/architecture-map.md` — map of the main auditor's regions and review path
 - `batch-audit-gh.ps1` — batch orchestrator
 - `run-audit-gh.ps1` — single-run GitHub Actions trigger
 - `.github/workflows/audit-lead.yml` — CI/CD workflow
 
+The main auditor is currently a large operational integration file. That is a conscious public-snapshot tradeoff: the working CLI/GitHub Actions path and the security-boundary exports remain together while the test suite protects the highest-risk confidence logic. See `docs/architecture-map.md` before reviewing `audit-lead.js` directly.
+
 ## Recruiter Reading Guide
 
-Start with `audit-lead.security.test.js` for the security boundary design, then read `audit-lead.js` for the browser automation and evidence model. The interesting engineering is the confidence discipline: findings are useful because they are tiered, not because every heuristic is treated as truth.
+Start with `audit-lead.security.test.js` for the security boundary design, then read `docs/architecture-map.md` before opening `audit-lead.js`. The interesting engineering is the confidence discipline: findings are useful because they are tiered, not because every heuristic is treated as truth.
