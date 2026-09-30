@@ -1,13 +1,15 @@
 # Website Audit Engine
 
+![CI](https://github.com/GalToast/website-audit-engine/actions/workflows/ci.yml/badge.svg)
+
 Evidence-tiered website security and performance auditor built with Playwright.
 
-This repo demonstrates practical automation around messy public websites: browser-driven checks, security-header review, payment surface detection, confidence-ranked findings, SQLite persistence, and GitHub Actions batch runs. The goal is not to produce noisy scanner output; it is to separate verified, user-facing issues from weaker review signals.
+This repo demonstrates practical automation around messy public websites: browser-driven checks, security-header review, payment surface detection, confidence-ranked findings, file-based evidence persistence (JSON evidence files, screenshots, and profile summaries), and GitHub Actions batch runs. The goal is not to produce noisy scanner output; it is to separate verified, user-facing issues from weaker review signals.
 
 ## Why It Matters
 
 - Runs repeatable audits across many domains without losing per-site evidence.
-- Keeps security, performance, accessibility, and runtime errors in one review path.
+- Keeps security, performance, and runtime errors in one review path.
 - Uses confidence tiers so an operator can tell the difference between "verified issue" and "needs human review."
 - Supports both local investigation and GitHub Actions batch execution.
 
@@ -21,6 +23,7 @@ This repo demonstrates practical automation around messy public websites: browse
 | `docs/architecture-map.md` | Reviewer map for the large operational auditor file |
 | `.github/workflows/audit-lead.yml` | Batchable GitHub Actions audit workflow |
 | `batch-audit-gh.ps1` | Multi-domain orchestration path |
+| `docs/example-audit-output.md` | Redacted sample of the JSON audit output a run produces |
 
 ## What It Checks
 
@@ -35,15 +38,15 @@ This repo demonstrates practical automation around messy public websites: browse
 - Sensitive path detection (.git, .htpasswd, config backups)
 
 **Performance**
-- Core Web Vitals benchmarking
-- Lighthouse accessibility scoring
+- Core Web Vitals measured through the browser Performance API: LCP, CLS, and an INP approximation from `largest-contentful-paint`, `layout-shift`, and `event` entries, plus navigation and paint timings
+- No Lighthouse dependency — every performance number comes from in-page Playwright evaluation, not a Lighthouse run
 
 **Automation**
 - Browser automation with a light default mode and heavier compatibility handling for sites that block ordinary inspection
 - Concurrent domain scanning with runtime error recovery
 - Confidence-tiered results (Diamond / Gold / Standard)
 - Batch GitHub Actions workflow for large-scale audits
-- Audit results persisted to SQLite
+- Audit results persisted as file-based evidence: JSON audit output to stdout, per-run evidence files (`headers.txt`, `cookies.json`, `cookie-security.json`, `security-findings.md`) in the profile's `evidence/` directory, screenshots in `ops/screenshots/`, and an updated `profile.md` summary
 
 ## Usage
 

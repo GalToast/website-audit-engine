@@ -19,7 +19,7 @@ Website auditing is dual-use. This repo frames the tool as an authorized review 
 
 ## What The Tool Does
 
-The audit path checks public site behavior and review signals: transport/security headers, cookie hygiene, payment surface detection, runtime errors, selected sensitive-path exposure checks, Lighthouse signals, and confidence-tiered findings. Findings are treated as evidence for review, not proof of compromise.
+The audit path checks public site behavior and review signals: transport/security headers, cookie hygiene, payment surface detection, runtime errors, selected sensitive-path exposure checks, Performance API signals (Core Web Vitals measured in-page, not a Lighthouse run), and confidence-tiered findings. Findings are treated as evidence for review, not proof of compromise.
 
 ## Operator Review
 
