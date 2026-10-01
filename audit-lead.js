@@ -495,6 +495,24 @@ const HEAVY_DETECTION_BYPASS_SCRIPT = `
 `;
 
 /**
+ * Light-touch detection-aware script for the default audit path.
+ * Masks only `navigator.webdriver` (the most common automation flag) so the
+ * audit itself does not create page-side JS breakage. The heavier
+ * HEAVY_DETECTION_BYPASS_SCRIPT stays reserved for blocker-circumvention fallback.
+ */
+const LIGHT_HEAVY_DETECTION_BYPASS_SCRIPT = `
+(function() {
+  'use strict';
+  try {
+    Object.defineProperty(navigator, 'webdriver', {
+      get: () => undefined,
+      configurable: true
+    });
+  } catch (e) {}
+})();
+`;
+
+/**
  * Tracking/analytics domains to block (reduces fingerprint surface + faster loads)
  * These scripts often detect automation and report to bot detection services
  */

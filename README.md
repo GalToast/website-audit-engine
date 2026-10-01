@@ -44,7 +44,7 @@ This repo demonstrates practical automation around messy public websites: browse
 **Automation**
 - Browser automation with a light default mode and heavier compatibility handling for sites that block ordinary inspection
 - Concurrent domain scanning with runtime error recovery
-- Confidence-tiered results (Diamond / Gold / Standard)
+- Confidence-tiered results (verified / probable / unverified)
 - Batch GitHub Actions workflow for large-scale audits
 - Audit results persisted as file-based evidence: JSON audit output to stdout, per-run evidence files (`headers.txt`, `cookies.json`, `cookie-security.json`, `security-findings.md`) in the profile's `evidence/` directory, screenshots in `ops/screenshots/`, and an updated `profile.md` summary
 
